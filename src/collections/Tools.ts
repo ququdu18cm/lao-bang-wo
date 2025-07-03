@@ -1,5 +1,4 @@
 import { CollectionConfig } from 'payload/types'
-import { slugField } from '../fields/slug'
 
 const Tools: CollectionConfig = {
   slug: 'tools',
@@ -26,7 +25,37 @@ const Tools: CollectionConfig = {
       required: true,
       unique: true,
     },
-    slugField(),
+    {
+      name: 'slug',
+      type: 'text',
+      label: 'URL标识',
+      required: true,
+      unique: true,
+      admin: {
+        description: '用于URL路径，只能包含字母、数字和连字符',
+      },
+      validate: (val) => {
+        if (val && !val.match(/^[a-z0-9-]+$/)) {
+          return 'URL标识只能包含小写字母、数字和连字符'
+        }
+        return true
+      },
+      hooks: {
+        beforeChange: [
+          ({ value, data }) => {
+            if (!value && data?.name) {
+              return data.name
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim()
+            }
+            return value
+          },
+        ],
+      },
+    },
     {
       name: 'description',
       type: 'textarea',

@@ -15,7 +15,7 @@ const Users: CollectionConfig = {
             <h2>验证您的邮箱地址</h2>
             <p>您好 ${user.firstName || '用户'}，</p>
             <p>请点击下面的链接来验证您的邮箱地址：</p>
-            <a href="${process.env.PAYLOAD_PUBLIC_SERVER_URL}/verify?token=${token}" 
+            <a href="${process.env.PAYLOAD_PUBLIC_SERVER_URL}/verify?token=${token}"
                style="background-color: #007cba; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
               验证邮箱
             </a>
@@ -32,7 +32,7 @@ const Users: CollectionConfig = {
             <h2>重置您的密码</h2>
             <p>您好 ${user.firstName || '用户'}，</p>
             <p>您请求重置密码。请点击下面的链接来设置新密码：</p>
-            <a href="${process.env.FRONTEND_URL}/reset-password?token=${token}" 
+            <a href="${process.env.FRONTEND_URL}/reset-password?token=${token}"
                style="background-color: #007cba; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
               重置密码
             </a>
@@ -114,9 +114,11 @@ const Users: CollectionConfig = {
     },
     {
       name: 'bio',
-      type: 'textarea',
+      type: 'richText',
       label: '个人简介',
-      maxLength: 500,
+      admin: {
+        description: '支持富文本格式，最多500字符',
+      },
     },
     {
       name: 'company',
@@ -248,7 +250,7 @@ const Users: CollectionConfig = {
           // 这里可以集成邮件发送逻辑
           console.log(`新用户注册: ${doc.email}`)
         }
-        
+
         // 记录用户角色变更
         if (operation === 'update' && previousDoc?.role !== doc.role) {
           console.log(`用户 ${doc.email} 角色从 ${previousDoc?.role} 变更为 ${doc.role}`)
