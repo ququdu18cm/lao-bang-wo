@@ -4,8 +4,8 @@
 
 echo "🔧 正在修复 GitPod 依赖问题..."
 
-# 进入正确目录
-cd /workspace/lao-bang-wo/无头工具站/无头CMS分享
+# 进入正确目录 (GitHub上是扁平结构)
+cd /workspace/lao-bang-wo
 
 # 创建简化的 package.json
 echo "📦 创建简化的 package.json..."
