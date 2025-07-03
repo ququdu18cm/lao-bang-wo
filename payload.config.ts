@@ -19,7 +19,6 @@ import Media from './src/collections/Media'
 import Settings from './src/globals/Settings'
 
 // 导入插件
-import { UmamiPlugin } from './src/plugins/umami-plugin'
 import umamiEnhancedPlugin from './src/plugins/umami-enhanced'
 import apiDocsPlugin from './src/plugins/api-docs'
 
@@ -100,8 +99,7 @@ export default buildConfig({
 
   // 插件配置
   plugins: [
-    // Umami 分析插件
-    UmamiPlugin,
+    // Umami 分析插件 Enhanced
     umamiEnhancedPlugin({
       enabled: true,
       trackPageViews: true,
