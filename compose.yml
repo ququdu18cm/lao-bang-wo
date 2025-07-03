@@ -1,0 +1,83 @@
+# 🚀 无头工具站 CMS - Phala Cloud 部署配置
+version: '3.8'
+
+services:
+  # 🎛️ 主应用服务
+  headless-cms:
+    build: .
+    container_name: headless-tools-cms
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PAYLOAD_SECRET=your-super-secret-key-here
+      - MONGODB_URI=mongodb://mongo:27017/headless-cms
+      - PAYLOAD_CONFIG_PATH=payload.config.js
+      - PORT=3000
+    depends_on:
+      - mongo
+      - redis
+    volumes:
+      - uploads:/app/uploads
+      - logs:/app/logs
+    networks:
+      - headless-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/admin"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # 🗄️ MongoDB 数据库
+  mongo:
+    image: mongo:7-jammy
+    container_name: headless-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password123
+      - MONGO_INITDB_DATABASE=headless-cms
+    volumes:
+      - mongo_data:/data/db
+      - mongo_config:/data/configdb
+    networks:
+      - headless-network
+    command: mongod --auth
+
+  # 🔴 Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: headless-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - headless-network
+    command: redis-server --appendonly yes
+
+# 📦 数据卷
+volumes:
+  mongo_data:
+    driver: local
+  mongo_config:
+    driver: local
+  redis_data:
+    driver: local
+  uploads:
+    driver: local
+  logs:
+    driver: local
+
+# 🌐 网络配置
+networks:
+  headless-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
