@@ -1,11 +1,10 @@
 import { buildConfig } from 'payload'
-import { mongooseAdapter } from '@payloadcms/db-mongoose'
+import { mongoAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
-import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 
 // 导入集合
@@ -202,7 +201,7 @@ export default buildConfig({
   ],
 
   // 数据库配置
-  db: mongooseAdapter({
+  db: mongoAdapter({
     url: process.env.DATABASE_URI || 'mongodb://localhost:27017/headless-tools-enhanced',
   }),
 
