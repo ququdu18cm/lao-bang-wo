@@ -1,12 +1,11 @@
-import { buildConfig } from 'payload/config'
-import { mongoAdapter } from '@payloadcms/db-mongodb'
-import { webpackBundler } from '@payloadcms/bundler-webpack'
+import { buildConfig } from 'payload'
+import { mongooseAdapter } from '@payloadcms/db-mongoose'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
-import { cloudStorage } from '@payloadcms/plugin-cloud-storage'
-import { s3Adapter } from '@payloadcms/plugin-cloud-storage/s3'
+import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
+import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 
 // 导入集合
@@ -26,7 +25,6 @@ export default buildConfig({
   // 管理面板配置
   admin: {
     user: Users.slug,
-    bundler: webpackBundler(),
     meta: {
       titleSuffix: '- 无头工具站 CMS Enhanced',
       favicon: '/favicon.ico',
@@ -204,12 +202,8 @@ export default buildConfig({
   ],
 
   // 数据库配置
-  db: mongoAdapter({
+  db: mongooseAdapter({
     url: process.env.DATABASE_URI || 'mongodb://localhost:27017/headless-tools-enhanced',
-    connectOptions: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },
   }),
 
   // 安全配置
